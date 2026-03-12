@@ -30,8 +30,8 @@ withDefaults(
 <style scoped>
 .stat-card {
   background: var(--surface);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5) var(--space-5);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
   display: flex;
   align-items: stretch;
   gap: 0;
@@ -41,7 +41,7 @@ withDefaults(
 }
 
 .stat-card__accent {
-  width: 4px;
+  width: 3px;
   flex-shrink: 0;
   border-radius: 2px;
 }
@@ -49,18 +49,18 @@ withDefaults(
 .stat-card__body {
   flex: 1;
   min-width: 0;
-  padding-left: var(--space-4);
+  padding-left: var(--space-3);
 }
 
 .stat-card__label {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
   margin: 0 0 var(--space-1);
   font-weight: 500;
 }
 
 .stat-card__value {
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;

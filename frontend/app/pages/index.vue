@@ -70,8 +70,8 @@ const statCards = [
 
 .top-page__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-4);
   margin-bottom: var(--space-8);
 }
 
