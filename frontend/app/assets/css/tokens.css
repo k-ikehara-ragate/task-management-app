@@ -1,0 +1,55 @@
+/**
+ * ダッシュボード用デザイントークン（プロフェッショナル向け）
+ * 参考: Dribbble Dashboard UI のトーン・余白・階層
+ */
+:root {
+  /* 背景 */
+  --dashboard-bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+
+  /* サイドバー（落ち着いたダーク） */
+  --sidebar-bg: #0f172a;
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --sidebar-text: #94a3b8;
+  --sidebar-text-active: #f1f5f9;
+  --sidebar-accent: rgba(79, 70, 229, 0.15);
+  --sidebar-accent-text: #818cf8;
+
+  /* テキスト */
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+
+  /* アクセント（控えめに1色） */
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+
+  /* ステータス（ビジネス寄り） */
+  --status-pending: #64748b;
+  --status-progress: #b45309;
+  --status-done: #047857;
+
+  /* ボーダー・分割 */
+  --border: #e2e8f0;
+  --border-subtle: #f1f5f9;
+
+  /* シャドウ（控えめ・レイヤード） */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.06), 0 4px 6px -4px rgba(15, 23, 42, 0.06);
+
+  /* 余白スケール */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  /* 角丸 */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}

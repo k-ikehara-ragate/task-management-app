@@ -92,7 +92,12 @@ npm run dev
 ```
 
 - ブラウザを自動で開く: `pnpm dev -o` または `npm run dev -- -o`
-- デフォルトで **http://localhost:3000** でアクセス可能（HMR 有効）
+- デフォルトで **http://localhost:3000** でアクセス可能（HMR 有効）。ポートは `nuxt.config.ts` の `devServer.port` で固定している。
+
+### ブラウザに何も表示されない場合
+
+- **URL**: 必ず **http://localhost:3000** を開く（別ポートで起動した場合はターミナルに表示される URL を使用）。
+- **白い画面**: アニメーション用 CSS の読み込みや実行に失敗するとコンテンツが非表示になる場合がある。本プロジェクトでは `animation-fill-mode: both` により、CSS 未読込時もコンテンツが表示されるようにしている。
 
 ---
 
