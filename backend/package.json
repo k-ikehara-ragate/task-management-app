@@ -1,0 +1,14 @@
+{
+  "name": "task-management-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dynamodb:create-table": "node scripts/create-table.js",
+    "dynamodb:seed-assignees": "node scripts/seed-assignees.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.700.0",
+    "@aws-sdk/util-dynamodb": "^3.700.0"
+  }
+}

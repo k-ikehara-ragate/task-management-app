@@ -1,0 +1,342 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "FrontendStack": {
+        "id": "FrontendStack",
+        "path": "FrontendStack",
+        "children": {
+          "FrontendBucket": {
+            "id": "FrontendBucket",
+            "path": "FrontendStack/FrontendBucket",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "FrontendStack/FrontendBucket/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {
+                    "bucketEncryption": {
+                      "serverSideEncryptionConfiguration": [
+                        {
+                          "serverSideEncryptionByDefault": {
+                            "sseAlgorithm": "AES256"
+                          }
+                        }
+                      ]
+                    },
+                    "publicAccessBlockConfiguration": {
+                      "blockPublicAcls": true,
+                      "blockPublicPolicy": true,
+                      "ignorePublicAcls": true,
+                      "restrictPublicBuckets": true
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.170.0"
+                }
+              },
+              "Policy": {
+                "id": "Policy",
+                "path": "FrontendStack/FrontendBucket/Policy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "FrontendStack/FrontendBucket/Policy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                      "aws:cdk:cloudformation:props": {
+                        "bucket": {
+                          "Ref": "FrontendBucketEFE2E19C"
+                        },
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "s3:*",
+                              "Condition": {
+                                "Bool": {
+                                  "aws:SecureTransport": "false"
+                                }
+                              },
+                              "Effect": "Deny",
+                              "Principal": {
+                                "AWS": "*"
+                              },
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "FrontendBucketEFE2E19C",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "FrontendBucketEFE2E19C",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": "s3:GetObject",
+                              "Condition": {
+                                "StringEquals": {
+                                  "AWS:SourceArn": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":cloudfront::",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":distribution/",
+                                        {
+                                          "Ref": "FrontendDistributionE6EAF405"
+                                        }
+                                      ]
+                                    ]
+                                  }
+                                }
+                              },
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "cloudfront.amazonaws.com"
+                              },
+                              "Resource": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "FrontendBucketEFE2E19C",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "/*"
+                                  ]
+                                ]
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.170.0"
+            }
+          },
+          "FrontendDistribution": {
+            "id": "FrontendDistribution",
+            "path": "FrontendStack/FrontendDistribution",
+            "children": {
+              "Origin1": {
+                "id": "Origin1",
+                "path": "FrontendStack/FrontendDistribution/Origin1",
+                "children": {
+                  "S3OriginAccessControl": {
+                    "id": "S3OriginAccessControl",
+                    "path": "FrontendStack/FrontendDistribution/Origin1/S3OriginAccessControl",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "FrontendStack/FrontendDistribution/Origin1/S3OriginAccessControl/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudFront::OriginAccessControl",
+                          "aws:cdk:cloudformation:props": {
+                            "originAccessControlConfig": {
+                              "name": "FrontendStackFrontendDistribOrigin1S3OriginAccessControl26B91B37",
+                              "signingBehavior": "always",
+                              "signingProtocol": "sigv4",
+                              "originAccessControlOriginType": "s3"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_cloudfront.CfnOriginAccessControl",
+                          "version": "2.170.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cloudfront.S3OriginAccessControl",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.5.1"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "FrontendStack/FrontendDistribution/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudFront::Distribution",
+                  "aws:cdk:cloudformation:props": {
+                    "distributionConfig": {
+                      "enabled": true,
+                      "origins": [
+                        {
+                          "domainName": {
+                            "Fn::GetAtt": [
+                              "FrontendBucketEFE2E19C",
+                              "RegionalDomainName"
+                            ]
+                          },
+                          "id": "FrontendStackFrontendDistributionOrigin11C741596",
+                          "s3OriginConfig": {
+                            "originAccessIdentity": ""
+                          },
+                          "originAccessControlId": {
+                            "Fn::GetAtt": [
+                              "FrontendDistributionOrigin1S3OriginAccessControl51A3EFC6",
+                              "Id"
+                            ]
+                          }
+                        }
+                      ],
+                      "defaultCacheBehavior": {
+                        "pathPattern": "*",
+                        "targetOriginId": "FrontendStackFrontendDistributionOrigin11C741596",
+                        "allowedMethods": [
+                          "GET",
+                          "HEAD",
+                          "OPTIONS"
+                        ],
+                        "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                        "compress": true,
+                        "viewerProtocolPolicy": "redirect-to-https"
+                      },
+                      "customErrorResponses": [
+                        {
+                          "errorCachingMinTtl": 0,
+                          "errorCode": 403,
+                          "responseCode": 200,
+                          "responsePagePath": "/index.html"
+                        },
+                        {
+                          "errorCachingMinTtl": 0,
+                          "errorCode": 404,
+                          "responseCode": 200,
+                          "responsePagePath": "/index.html"
+                        }
+                      ],
+                      "defaultRootObject": "index.html",
+                      "httpVersion": "http2",
+                      "ipv6Enabled": true
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudfront.CfnDistribution",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudfront.Distribution",
+              "version": "2.170.0"
+            }
+          },
+          "CloudFrontUrl": {
+            "id": "CloudFrontUrl",
+            "path": "FrontendStack/CloudFrontUrl",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.170.0"
+            }
+          },
+          "S3BucketName": {
+            "id": "S3BucketName",
+            "path": "FrontendStack/S3BucketName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.170.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "FrontendStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "FrontendStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.5.1"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "FrontendStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.170.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "FrontendStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.170.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.170.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.5.1"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.170.0"
+    }
+  }
+}
