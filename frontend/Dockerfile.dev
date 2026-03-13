@@ -1,0 +1,11 @@
+# 開発用（Windows/Mac 共通）。Docker Compose で frontend-dev として起動。
+# ホストの frontend をマウントし、コンテナ内で npm run dev を実行する。
+FROM node:20-alpine
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm ci
+COPY . .
+# コンテナ外からのアクセス用（docker compose で上書きマウントされるがデフォルトを用意）
+ENV NUXT_HOST=0.0.0.0
+EXPOSE 3000
+CMD ["sh", "-c", "npm install && npm run dev"]

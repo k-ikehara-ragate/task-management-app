@@ -1,7 +1,6 @@
 /**
  * 担当者マスタ（F-08）
- * 要件: プルダウン用の担当者一覧（情シス 3〜4名）
- * RAG: composables に切り出し
+ * GET /api/assignees で取得。API が使えない場合は固定リストにフォールバック。
  */
 
 export interface Assignee {
@@ -9,13 +8,26 @@ export interface Assignee {
   name: string
 }
 
-const ASSIGNEES: Assignee[] = [
+const ASSIGNEES_FALLBACK: Assignee[] = [
   { id: '1', name: '担当者A' },
   { id: '2', name: '担当者B' },
   { id: '3', name: '担当者C' },
-  { id: '4', name: '担当者D' }
+  { id: '4', name: '担当者D' },
 ]
 
-export function useAssignees (): { assignees: Assignee[] } {
-  return { assignees: ASSIGNEES }
+/** 担当者を名前順（A→B→C→D）でソート */
+function sortAssigneesByName (list: Assignee[]): Assignee[] {
+  return [...list].sort((a, b) => a.name.localeCompare(b.name, 'ja'))
+}
+
+export function useAssignees () {
+  const { data, pending } = useFetch<Assignee[]>('/api/assignees', {
+    key: 'assignees',
+    default: () => ASSIGNEES_FALLBACK,
+  })
+  const assignees = computed(() => sortAssigneesByName(data.value ?? ASSIGNEES_FALLBACK))
+  return {
+    assignees,
+    loading: pending,
+  }
 }

@@ -9,6 +9,8 @@ export interface TaskFormInput {
   title: string
   assigneeId: string
   dueDate: string
+  /** 期日の時刻（HH:mm）。省略時は終日として扱う */
+  dueTime?: string
 }
 
 export interface Task extends TaskFormInput {

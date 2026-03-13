@@ -29,16 +29,18 @@
         </div>
       </div>
     </div>
-    <div class="top-page__grid">
-      <AppStatCard
-        v-for="(card, i) in statCards"
-        :key="card.label"
-        :label="card.label"
-        :value="card.value"
-        :icon-bg="card.iconBg"
-        :delay="(i + 1) as 1 | 2 | 3 | 4 | 5"
-      />
-    </div>
+    <Transition name="stat-fade" mode="out-in">
+      <div :key="selectedAssigneeId" class="top-page__grid">
+        <AppStatCard
+          v-for="(card, i) in statCards"
+          :key="card.label"
+          :label="card.label"
+          :value="card.value"
+          :icon-bg="card.iconBg"
+          :delay="(i + 1) as 1 | 2 | 3 | 4 | 5"
+        />
+      </div>
+    </Transition>
     <Transition name="fade-slide">
       <section class="welcome-section animate-fade-in-up delay-3">
         <h2 class="welcome-section__title">
@@ -166,7 +168,7 @@ onMounted(fetchTasks)
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.3s ease, color 0.3s ease, opacity 0.3s ease;
 }
 
 .assignee-toggle__btn:hover {
@@ -177,6 +179,16 @@ onMounted(fetchTasks)
 .assignee-toggle__btn--active {
   color: var(--assignee-toggle-active-text, #fff);
   background: var(--accent);
+  animation: assignee-btn-fade-in 0.35s ease-out;
+}
+
+@keyframes assignee-btn-fade-in {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .assignee-toggle__btn--active:hover {
@@ -286,6 +298,25 @@ onMounted(fetchTasks)
   justify-content: center;
   font-size: 1rem;
   font-weight: 600;
+}
+
+/* 統計カード: 担当者切り替え時はフェードアウト完了後に0.5sでフェードイン */
+.stat-fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.stat-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.stat-fade-enter-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.stat-fade-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
 }
 
 /* Vue Transition（アニメーション） */

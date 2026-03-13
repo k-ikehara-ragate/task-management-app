@@ -6,7 +6,9 @@
     <div class="stat-card__accent" :style="{ background: iconBg }" aria-hidden="true" />
     <div class="stat-card__body">
       <p class="stat-card__label">{{ label }}</p>
-      <p class="stat-card__value">{{ value }}</p>
+      <Transition name="value-fade" mode="out-in">
+        <p :key="String(value)" class="stat-card__value">{{ value }}</p>
+      </Transition>
     </div>
   </div>
 </template>
@@ -65,5 +67,15 @@ withDefaults(
   color: var(--text-primary);
   margin: 0;
   letter-spacing: -0.02em;
+}
+
+.value-fade-enter-active,
+.value-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.value-fade-enter-from,
+.value-fade-leave-to {
+  opacity: 0;
 }
 </style>
