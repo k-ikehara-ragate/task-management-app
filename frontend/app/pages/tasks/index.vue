@@ -242,7 +242,7 @@ onMounted(fetchTasks)
 
 .task-row {
   display: grid;
-  grid-template-columns: 1fr minmax(6rem, auto) minmax(7rem, auto) minmax(5rem, auto) minmax(6rem, auto);
+  grid-template-columns: 1fr 7rem 7rem 7rem 7rem;
   gap: var(--space-4);
   align-items: center;
   padding: var(--space-4);
@@ -265,6 +265,9 @@ onMounted(fetchTasks)
 .task-row__header-cell {
   padding: var(--space-2) var(--space-3);
   min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .task-row__title-link {
@@ -295,6 +298,8 @@ onMounted(fetchTasks)
   display: flex;
   align-items: center;
   min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .task-row__due-time {
@@ -305,6 +310,7 @@ onMounted(fetchTasks)
 .task-row__input {
   width: 100%;
   min-width: 0;
+  max-width: 100%;
   padding: var(--space-2) var(--space-3);
   font-size: 0.8125rem;
   color: var(--text-primary);
@@ -313,6 +319,7 @@ onMounted(fetchTasks)
   border-radius: var(--radius-sm);
   cursor: pointer;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .task-row__select:focus,

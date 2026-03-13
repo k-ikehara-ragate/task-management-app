@@ -2,7 +2,7 @@
 
 develop ブランチでもタスクの登録・一覧・編集を DynamoDB に保存して利用できます。
 
-**Docker だけで環境を整える場合**: リポジトリルートで `docker compose build` → `docker compose up -d`（または `npm run docker:dev`）を実行するだけで、DB・テーブル作成・シード・フロントが一括で起動する。詳細は [docker-development.md](./docker-development.md) を参照。
+**Docker だけで環境を整える場合**: リポジトリルートで `docker compose build` → `docker compose up -d`（または `npm run docker:dev`）を実行するだけで、DB・テーブル作成・シード・フロントが一括で起動する。**DynamoDB のデータは名前付きボリュームで永続化されるため、Docker を終了してもテーブルとデータは残り、どの OS（Windows/Mac/Linux）でも同じ構成で同じデータが利用できる。** 詳細は [docker-development.md](./docker-development.md) を参照。
 
 **ホストで Node を動かす場合**（以下、すべてリポジトリルートで実行）:
 

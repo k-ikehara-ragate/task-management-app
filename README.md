@@ -33,7 +33,7 @@ docker compose build
 docker compose up -d
 ```
 
-これだけで **DB（DynamoDB Local）・テーブル作成・シード・フロント** が起動する。ブラウザで http://localhost:3000 を開く。`npm run docker:dev` でも同様（フォアグラウンドで起動）。
+これだけで **DB（DynamoDB Local）・テーブル作成・シード・フロント** が起動する。**ブラウザでは必ず http://localhost:3000 を開くこと**（ログに出る `http://0.0.0.0:3000` はブラウザでは開けない）。`npm run docker:dev` でも同様（フォアグラウンドで起動）。
 
 ### ホストで Node を動かす場合
 

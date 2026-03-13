@@ -8,7 +8,6 @@ import {
   PutItemCommand,
   QueryCommand,
   ScanCommand,
-  UpdateItemCommand,
 } from '@aws-sdk/client-dynamodb'
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
 
@@ -22,14 +21,16 @@ export function getDynamoClient(event: Parameters<typeof useRuntimeConfig>[0]) {
     process.env.DYNAMODB_ENDPOINT ||
     ''
   const region = process.env.AWS_REGION || 'ap-northeast-1'
-  const isLocal =
+  const isLocalEndpoint =
     typeof endpoint === 'string' &&
     endpoint.length > 0 &&
-    (endpoint.includes('localhost') || endpoint.includes('127.0.0.1'))
+    (endpoint.includes('localhost') ||
+      endpoint.includes('127.0.0.1') ||
+      endpoint.includes('dynamodb-local'))
   return new DynamoDBClient({
     region,
     ...(endpoint ? { endpoint } : {}),
-    ...(isLocal && {
+    ...(isLocalEndpoint && {
       credentials: { accessKeyId: 'dummy', secretAccessKey: 'dummy' },
     }),
   })
@@ -90,7 +91,6 @@ export {
   PutItemCommand,
   QueryCommand,
   ScanCommand,
-  UpdateItemCommand,
   marshall,
   unmarshall,
 }

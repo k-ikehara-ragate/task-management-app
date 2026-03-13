@@ -28,15 +28,19 @@ flowchart LR
     B[db-init\n初回のみ]
     C[frontend-dev\nport 3000]
   end
+  subgraph volumes
+    V[(dynamodb_data)]
+  end
   A -->|healthy| B
   B -->|completed| C
   C -->|NUXT_DYNAMODB_ENDPOINT| A
+  A -->|"-dbPath /data"| V
 ```
 
 | サービス | イメージ/ビルド | ポート | 備考 |
 |----------|------------------|--------|------|
-| **dynamodb-local** | `amazon/dynamodb-local:latest` | 8000 | in-memory。ヘルスチェック通過後に db-init が実行される。 |
-| **db-init** | `backend/Dockerfile` からビルド | — | テーブル作成・担当者シード実行後に終了（restart: no）。frontend-dev はこの完了を待つ。 |
+| **dynamodb-local** | `amazon/dynamodb-local:latest` | 8000 | **データ永続化**: 名前付きボリューム `dynamodb_data` に `-dbPath /data` で保存。Docker 終了後もデータが残り、Windows/Mac/Linux で同じ構成。ヘルスチェック通過後に db-init が実行される。 |
+| **db-init** | `backend/Dockerfile` からビルド | — | テーブル作成・担当者シード実行後に終了（restart: no）。テーブルが既に存在する場合はスキップ。frontend-dev はこの完了を待つ。 |
 | **frontend-dev** | `frontend/Dockerfile.dev` からビルド | 3000 | `./frontend` をマウント、`frontend_node_modules` ボリュームで node_modules を永続化。 |
 
 ### 1.3 ルートの npm スクリプト（Docker 関連）
@@ -78,6 +82,8 @@ flowchart LR
 1. **リポジトリルートに docker-compose.yml を配置**（既存の場合は更新）。
 2. **dynamodb-local サービス**  
    - イメージ: `amazon/dynamodb-local:latest`。ポート: `8000:8000`。  
+   - コマンド: `-jar DynamoDBLocal.jar -sharedDb -dbPath /data`（**永続化**。`-inMemory` ではなく `-dbPath` で名前付きボリューム `dynamodb_data` に保存）。  
+   - ボリューム: `dynamodb_data:/data`。  
    - ヘルスチェック: `curl -s -o /dev/null http://localhost:8000`（応答すれば成功。DynamoDB はルートで 400 を返すため `-f` は使わない）。
 3. **db-init サービス**  
    - ビルド: `context: ./backend`, `dockerfile: Dockerfile`。  
@@ -91,7 +97,8 @@ flowchart LR
    - `depends_on`: `db-init`（condition: service_completed_successfully）。  
    - ポート: `3000:3000`。
 5. **ボリューム**  
-   - `frontend_node_modules` を名前付きボリュームとして定義。
+   - `frontend_node_modules`: フロントの node_modules を永続化。  
+   - `dynamodb_data`: **DynamoDB Local のデータ永続化用**。`docker compose down` してもデータは残る。どの OS（Windows/Mac/Linux）でも同じ名前付きボリュームで同じ挙動となる。
 
 ### 2.3 バックエンド（DB 初期化）用 Dockerfile の作成
 
@@ -156,13 +163,22 @@ flowchart LR
    - 起動順: dynamodb-local（ヘルスチェック通過）→ db-init（テーブル作成・シード）→ frontend-dev。
 
 3. **ブラウザで確認**  
-   - http://localhost:3000（アプリ）、http://localhost:8000（DynamoDB Local）。
+   - **アプリ**: 必ず **http://localhost:3000** を開く。ログに表示される `http://0.0.0.0:3000` はブラウザでは開けない（0.0.0.0 は接続用アドレスではない）。
+   - DynamoDB Local: http://localhost:8000（参照用）。
 
 4. **停止**
    ```bash
    docker compose down
    ```
-   - DynamoDB は in-memory のため、停止するとデータは消える。再起動時は db-init が再度実行され、テーブル・シードが作り直される。
+   - **DynamoDB のデータは名前付きボリューム `dynamodb_data` に保存されているため、停止しても残る。** 再起動時は同じデータが利用可能。テーブルが既に存在する場合は db-init がスキップされ、既存のタスク・担当者データがそのまま使える。
+
+### 3.5 データ永続化と OS 共通
+
+| 項目 | 説明 |
+|------|------|
+| **永続化** | DynamoDB Local は `-dbPath /data` でコンテナ内の `/data` に書き出し、Docker の名前付きボリューム `dynamodb_data` をマウントしている。`docker compose down` してもボリュームは削除されず、次回 `docker compose up` で同じデータが読み込まれる。 |
+| **どの OS でも同じ** | 名前付きボリュームは Docker が管理するため、Windows・Mac・Linux のいずれでも同じ `docker-compose.yml` で同じ挙動となる。ホストのパスに依存しない。 |
+| **データを消したい場合** | `docker compose down -v` でボリュームごと削除できる。次回起動時は db-init がテーブル作成・シードを最初から実行する。 |
 
 ### 3.3 方式 A: ホストで Node を実行（DynamoDB のみ Docker）
 
@@ -219,7 +235,7 @@ flowchart TD
 | Docker | Docker Desktop で WSL2 バックエンド推奨 | そのまま利用可能 |
 | ボリュームマウント | WSL2 利用時はパフォーマンス良好 | 問題なし |
 
-- **破壊的コマンド**: `rm -rf` や `nuxi cleanup` は使わず、必要なら `docker compose down -v` でボリューム削除。
+- **破壊的コマンド**: `rm -rf` や `nuxi cleanup` は使わず、DynamoDB のデータを初期化したい場合のみ `docker compose down -v` でボリューム削除を検討する。
 - **出典**: Docker Compose 公式 [Compose file specification](https://docs.docker.com/compose/compose-file/) に準拠。
 
 ---

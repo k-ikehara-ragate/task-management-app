@@ -8,4 +8,4 @@ COPY . .
 # コンテナ外からのアクセス用（docker compose で上書きマウントされるがデフォルトを用意）
 ENV NUXT_HOST=0.0.0.0
 EXPOSE 3000
-CMD ["sh", "-c", "npm install && npm run dev"]
+CMD ["sh", "-c", "echo '' && echo '=> ブラウザで http://localhost:3000 を開いてください（0.0.0.0 では開けません）' && echo '' && npm install && npm run dev"]
