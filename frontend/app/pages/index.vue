@@ -34,7 +34,7 @@
       </h2>
       <div class="quick-actions__grid">
         <NuxtLink
-          to="/tasks?new=1"
+          to="/tasks/new"
           class="quick-action-card hover-lift"
         >
           <span class="quick-action-card__icon" aria-hidden="true">+</span>
@@ -163,7 +163,7 @@ const statCards = [
   width: 36px;
   height: 36px;
   border-radius: var(--radius-sm);
-  background: rgba(79, 70, 229, 0.08);
+  background: var(--accent-bg-subtle);
   color: var(--accent);
   display: flex;
   align-items: center;

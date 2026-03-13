@@ -22,7 +22,7 @@ defineProps<{
 .header {
   padding: var(--space-6) var(--space-6) 0;
   background: var(--dashboard-bg);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border);
 }
 
 .header__inner {

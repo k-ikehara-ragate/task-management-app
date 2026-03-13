@@ -25,6 +25,7 @@
       </NuxtLink>
     </nav>
     <div class="sidebar__footer animate-fade-in delay-4">
+      <AppThemeToggle class="sidebar__theme-toggle" />
       <span class="sidebar__version">Phase 1</span>
     </div>
   </aside>
@@ -118,6 +119,13 @@ const isOpen = defineModel<boolean>('open', { default: false })
   border-top: 1px solid var(--sidebar-border);
   font-size: 0.6875rem;
   color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sidebar__theme-toggle {
+  align-self: flex-start;
 }
 
 .sidebar__version {
