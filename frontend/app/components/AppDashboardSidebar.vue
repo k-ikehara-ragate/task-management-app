@@ -11,8 +11,7 @@
         active-class="sidebar__link--active"
         @click="isOpen = false"
       >
-        <span class="sidebar__icon" aria-hidden="true">▣</span>
-        <span>ダッシュボード</span>
+        ダッシュボード
       </NuxtLink>
       <NuxtLink
         to="/tasks"
@@ -20,8 +19,7 @@
         active-class="sidebar__link--active"
         @click="isOpen = false"
       >
-        <span class="sidebar__icon" aria-hidden="true">☐</span>
-        <span>タスク一覧</span>
+        タスク一覧
       </NuxtLink>
     </nav>
     <div class="sidebar__footer animate-fade-in delay-4">
@@ -102,16 +100,18 @@ const isOpen = defineModel<boolean>('open', { default: false })
   color: var(--sidebar-text-active);
 }
 
+.sidebar__link:focus-visible {
+  outline: 2px solid var(--sidebar-focus-ring);
+  outline-offset: 2px;
+}
+
 .sidebar__link--active {
   background: var(--sidebar-accent);
   color: var(--sidebar-accent-text);
 }
 
-.sidebar__icon {
-  font-size: 1rem;
-  opacity: 0.85;
-  width: 1.25rem;
-  text-align: center;
+.sidebar__link--active:focus-visible {
+  outline-color: var(--sidebar-focus-ring-active);
 }
 
 .sidebar__footer {

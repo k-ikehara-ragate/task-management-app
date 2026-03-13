@@ -26,6 +26,8 @@
   --sidebar-text-active: #f1f5f9;
   --sidebar-accent: rgba(79, 70, 229, 0.15);
   --sidebar-accent-text: #818cf8;
+  --sidebar-focus-ring: rgba(255, 255, 255, 0.55);
+  --sidebar-focus-ring-active: #a5b4fc;
   --text-primary: #0f172a;
   --text-secondary: #64748b;
   --text-muted: #94a3b8;
@@ -53,6 +55,8 @@
   --sidebar-text-active: #f1f5f9;
   --sidebar-accent: rgba(99, 102, 241, 0.2);
   --sidebar-accent-text: #a5b4fc;
+  --sidebar-focus-ring: rgba(255, 255, 255, 0.6);
+  --sidebar-focus-ring-active: #c7d2fe;
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;

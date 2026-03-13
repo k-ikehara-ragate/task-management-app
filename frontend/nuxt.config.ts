@@ -5,5 +5,9 @@ export default defineNuxtConfig({
   css: ['~/assets/css/tokens.css', '~/assets/css/animations.css'],
   devServer: {
     port: 3000
-  }
+  },
+  // CloudFront + S3 静的配信用: ビルド成果物は .output/public に出力される
+  nitro: {
+    preset: 'static',
+  },
 })
