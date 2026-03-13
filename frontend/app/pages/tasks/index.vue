@@ -264,22 +264,23 @@ onMounted(fetchTasks)
 
 .task-row__header-cell {
   padding: var(--space-2) var(--space-3);
+  min-width: 0;
 }
 
 .task-row__title-link {
   font-weight: 500;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--text-primary);
   text-decoration: none;
-  display: inline-block;
-  padding: var(--space-1) var(--space-2);
-  margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-2));
+  display: block;
+  padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
   transition: background 0.15s ease, color 0.15s ease;
+  box-sizing: border-box;
 }
 
 .task-row__title-link:hover {
