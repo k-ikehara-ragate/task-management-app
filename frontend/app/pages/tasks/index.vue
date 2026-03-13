@@ -238,6 +238,7 @@ onMounted(fetchTasks)
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  overflow: visible;
 }
 
 .task-row {
@@ -251,6 +252,7 @@ onMounted(fetchTasks)
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   transition: background 0.15s ease, border-color 0.15s ease;
+  overflow: visible;
 }
 
 .task-row--header {
@@ -302,10 +304,6 @@ onMounted(fetchTasks)
   box-sizing: border-box;
 }
 
-.task-row__due-time {
-  min-width: 0;
-}
-
 .task-row__select,
 .task-row__input {
   width: 100%;
@@ -320,12 +318,40 @@ onMounted(fetchTasks)
   cursor: pointer;
   text-align: center;
   box-sizing: border-box;
+  position: relative;
+  z-index: 0;
 }
 
 .task-row__select:focus,
 .task-row__input:focus {
   outline: none;
   border-color: var(--accent);
+  z-index: 1;
+}
+
+/* ネイティブの日付・時刻ピッカーが切れないようにし、ダークテーマで白で統一 */
+.task-row__due,
+.task-row__due-time {
+  overflow: visible;
+}
+
+.task-row__input {
+  min-height: 2.25rem;
+}
+
+.theme-dark .task-row__input {
+  color: #fff;
+  background: var(--surface-elevated);
+}
+
+.theme-dark .task-row__input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.theme-dark .task-row__input::-webkit-datetime-edit {
+  color: #fff;
 }
 
 .task-row__select:disabled,
@@ -340,13 +366,22 @@ onMounted(fetchTasks)
 
 .task-row__status--not_started {
   color: var(--status-pending);
+  border-color: var(--status-pending);
+  background: var(--surface-elevated);
+  background: color-mix(in srgb, var(--status-pending) 14%, var(--surface-elevated));
 }
 
 .task-row__status--in_progress {
   color: var(--status-progress);
+  border-color: var(--status-progress);
+  background: var(--surface-elevated);
+  background: color-mix(in srgb, var(--status-progress) 14%, var(--surface-elevated));
 }
 
 .task-row__status--done {
   color: var(--status-done);
+  border-color: var(--status-done);
+  background: var(--surface-elevated);
+  background: color-mix(in srgb, var(--status-done) 14%, var(--surface-elevated));
 }
 </style>

@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import type { Construct } from 'constructs';
 /**
  * CloudFront + S3 静的サイト用スタック。
  * 管理コンソールから S3 にビルド成果物をアップロードして配信する。

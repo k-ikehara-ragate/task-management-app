@@ -325,6 +325,169 @@
           "version": "2.170.0"
         }
       },
+      "DynamoDBStack": {
+        "id": "DynamoDBStack",
+        "path": "DynamoDBStack",
+        "children": {
+          "TaskManagementTable": {
+            "id": "TaskManagementTable",
+            "path": "DynamoDBStack/TaskManagementTable",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "DynamoDBStack/TaskManagementTable/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "pk",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "sk",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "gsi1pk",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "gsi1sk",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "gsi2pk",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "gsi2sk",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "billingMode": "PAY_PER_REQUEST",
+                    "globalSecondaryIndexes": [
+                      {
+                        "indexName": "gsi1-assignee-due",
+                        "keySchema": [
+                          {
+                            "attributeName": "gsi1pk",
+                            "keyType": "HASH"
+                          },
+                          {
+                            "attributeName": "gsi1sk",
+                            "keyType": "RANGE"
+                          }
+                        ],
+                        "projection": {
+                          "projectionType": "ALL"
+                        }
+                      },
+                      {
+                        "indexName": "gsi2-entity-due",
+                        "keySchema": [
+                          {
+                            "attributeName": "gsi2pk",
+                            "keyType": "HASH"
+                          },
+                          {
+                            "attributeName": "gsi2sk",
+                            "keyType": "RANGE"
+                          }
+                        ],
+                        "projection": {
+                          "projectionType": "ALL"
+                        }
+                      }
+                    ],
+                    "keySchema": [
+                      {
+                        "attributeName": "pk",
+                        "keyType": "HASH"
+                      },
+                      {
+                        "attributeName": "sk",
+                        "keyType": "RANGE"
+                      }
+                    ],
+                    "tableName": "task-management"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.170.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "DynamoDBStack/TaskManagementTable/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.170.0"
+            }
+          },
+          "TableName": {
+            "id": "TableName",
+            "path": "DynamoDBStack/TableName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.170.0"
+            }
+          },
+          "TableArn": {
+            "id": "TableArn",
+            "path": "DynamoDBStack/TableArn",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.170.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "DynamoDBStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "DynamoDBStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.5.1"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "DynamoDBStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.170.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "DynamoDBStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.170.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.170.0"
+        }
+      },
       "Tree": {
         "id": "Tree",
         "path": "Tree",

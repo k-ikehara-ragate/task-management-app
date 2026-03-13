@@ -4,6 +4,27 @@
 
 ---
 
+## 今回実装すること（S3・CloudFront）
+
+| 項目 | 内容 |
+|------|------|
+| CDK ソースの整備 | FrontendStack（S3 + CloudFront）の TypeScript ソース（`infra/lib/frontend-stack.ts`、`infra/bin/infra.ts`）の復元・整備。DynamoDBStack はエントリに残すがデプロイは行わない。 |
+| infra のビルド環境 | `infra/package.json`・`infra/tsconfig.json` の整備。`npm install` → `npm run build` で `dist/` を生成し、`npx cdk deploy FrontendStack` を実行可能にする。 |
+| デプロイ手順のドキュメント | [cloudfront-s3-deployment.md](./cloudfront-s3-deployment.md) に、CDK ブートストラップ・FrontendStack のデプロイ・フロント静的ビルドの S3 アップロード手順を記載する。 |
+| 実際の AWS 構築 | `npx cdk deploy FrontendStack` により S3 バケットと CloudFront ディストリビューションを AWS 上に作成する。静的サイトのみ配信（API・DynamoDB は未使用）。 |
+
+---
+
+## 今後実装すること
+
+| 項目 | 内容 |
+|------|------|
+| DynamoDB スタックのデプロイ | DynamoDBStack を AWS にデプロイ（`npx cdk deploy DynamoDBStack`）。本番用テーブルの作成。 |
+| 本番 API と DynamoDB の連携 | 本番環境でフロントから DynamoDB を利用するための環境変数・IAM・エンドポイント設定。必要に応じて API ゲートウェイや Lambda 等の構成検討。 |
+| フロントと本番バックエンドの接続 | 静的サイト（CloudFront + S3）から本番 API を呼び出す構成（CORS・ドメイン・認証等）の整備。 |
+
+---
+
 ## 1. 実装した手順（実施済み）
 
 | 順序 | 内容 | 成果物・場所 |
