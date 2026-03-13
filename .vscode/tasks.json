@@ -22,14 +22,6 @@
       "presentation": { "reveal": "always" }
     },
     {
-      "label": "docker: DynamoDB Local 起動",
-      "type": "shell",
-      "command": "npm run docker:up",
-      "options": { "cwd": "${workspaceFolder}" },
-      "problemMatcher": [],
-      "presentation": { "reveal": "always" }
-    },
-    {
       "label": "db: テーブル作成・シード",
       "type": "shell",
       "command": "npm run db:setup",

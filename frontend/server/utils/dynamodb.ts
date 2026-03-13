@@ -64,7 +64,7 @@ export function handleDynamoError(err: unknown): never {
   if (name === 'ResourceNotFoundException' || message.includes('ResourceNotFoundException')) {
     statusCode = 503
     statusMessage = isLocal
-      ? 'テーブルが存在しません。npm run docker:up のあと npm run db:create-table を実行してください。'
+      ? 'テーブルが存在しません。DynamoDB Local 起動後に npm run db:create-table を実行してください。'
       : 'DynamoDB テーブルが存在しません。'
   } else if (
     code === 'ECONNREFUSED' ||
@@ -74,7 +74,7 @@ export function handleDynamoError(err: unknown): never {
   ) {
     statusCode = 503
     statusMessage = isLocal
-      ? 'DynamoDB Local に接続できません。npm run docker:up で起動し、npm run db:create-table でテーブルを作成してください。'
+      ? 'DynamoDB Local に接続できません。ポート 8000 で起動しているか確認し、npm run db:create-table でテーブルを作成してください。'
       : 'DynamoDB に接続できません。'
   } else if (name === 'UnrecognizedClientException' || message.includes('credentials')) {
     statusCode = 503

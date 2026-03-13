@@ -23,14 +23,14 @@ node -v   # v20.x.x 以上であること
 
 ## 実行手順一覧
 
-**本リポジトリでは、開発用コマンドはすべてリポジトリルートから実行する。** ルートの `package.json` に `dev`・`docker:up`・`db:setup` 等のスクリプトが定義されている。
+**本リポジトリでは、開発用コマンドはすべてリポジトリルートから実行する。** ルートの `package.json` に `dev`・`db:setup` 等のスクリプトが定義されている。
 
 | 順序 | 手順 | コマンド／作業内容 |
 |------|------|---------------------|
 | 1 | スケルトン作成 | `npm create nuxt@latest frontend`（プロジェクト名は任意。既存リポジトリ内ではサブディレクトリ名を指定） |
 | 2 | 依存関係インストール | リポジトリルートで `npm run install:all`（frontend / backend を一括） |
 | 3 | 開発サーバー起動 | リポジトリルートで `npm run dev` → http://localhost:3000 |
-| （DynamoDB 利用時） | Docker 起動・DB セットアップ | [docker-development.md](./docker-development.md) 参照（`npm run docker:up` → `npm run db:setup` 等） |
+| （DynamoDB 利用時） | DynamoDB Local 起動・DB セットアップ | [local-development.md](./local-development.md) 参照（DynamoDB Local をホストで起動 → `npm run db:setup` → `npm run dev`） |
 
 ---
 
@@ -85,7 +85,7 @@ npm run dev
 ```
 
 - デフォルトで **http://localhost:3000** でアクセス可能（HMR 有効）。ポートは `frontend/nuxt.config.ts` の `devServer.port` で固定している。
-- DynamoDB を利用する場合は、[docker-development.md](./docker-development.md) に従い、先に `npm run docker:up` と `npm run db:setup`（初回のみ）を実行しておく。
+- DynamoDB を利用する場合は、[local-development.md](./local-development.md) に従い、先に DynamoDB Local をホストで起動し、`npm run db:setup`（初回のみ）を実行しておく。
 
 ### ブラウザに何も表示されない場合
 
@@ -129,7 +129,7 @@ flowchart TD
 | テンプレート | minimal（Nuxt 4） |
 | 依存関係 | リポジトリルートで `npm run install:all`（frontend / backend） |
 | 開発サーバー | リポジトリルートで `npm run dev` → http://localhost:3000 |
-| Docker・DB | [docker-development.md](./docker-development.md) に手順を集約（`npm run docker:up`・`npm run db:setup` 等） |
+| DynamoDB Local・DB | [local-development.md](./local-development.md) に手順を集約（ホストで DynamoDB Local 起動 → `npm run db:setup`・`npm run dev`） |
 
 **補足**: 開発サーバー起動時に `EMFILE: too many open files` が出る場合は、環境のファイルディスクリプタ上限（macOS の `ulimit -n` 等）の影響です。インストール自体は完了している。
 

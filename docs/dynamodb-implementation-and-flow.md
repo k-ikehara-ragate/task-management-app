@@ -9,7 +9,7 @@
 | 順序 | 内容 | 成果物・場所 |
 |------|------|----------------|
 | 1 | 詳細設計の確定 | `docs/detailed-design-dynamodb.md`（PK/SK/GSI・属性）、`RAG/basic-design.md` への参照追記 |
-| 2 | DynamoDB Local の導入 | `docker-compose.yml`（ポート 8000）、本ドキュメント「2. 今後の流れ」に手順集約 |
+| 2 | DynamoDB Local の導入 | ホストで Java によりポート 8000 で起動。手順は [local-development.md](./local-development.md) に集約 |
 | 3 | ローカル用テーブル作成・シード | `backend/scripts/create-table.js`、`backend/scripts/seed-assignees.js` |
 | 4 | Nuxt server API と DynamoDB 接続 | `frontend/server/utils/dynamodb.ts`、`task-mapping.ts`、`server/api/`（assignees, tasks） |
 | 5 | IaC（CDK）で本番テーブル定義 | `infra/lib/dynamodb-stack.ts`、`infra/bin/infra.ts` に DynamoDBStack 追加 |
@@ -24,8 +24,8 @@
 
 ### 2.1 ローカル開発（日常の流れ）
 
-- **Docker の起動・テーブル作成・フロント起動の手順は [docker-development.md](./docker-development.md) に一括で記載している。** リポジトリルートで `npm run install:all` → `npm run db:setup` → `npm run dev`（または `npm run docker:dev`）で実行できる。
-- DynamoDB Local のエンドポイント: `http://localhost:8000`（データは in-memory のためコンテナ停止で消える）。
+- **DynamoDB Local の起動・テーブル作成・フロント起動の手順は [local-development.md](./local-development.md) に一括で記載している。** リポジトリルートで、DynamoDB Local をホストで起動したうえで `npm run install:all` → `npm run db:setup` → `npm run dev` で実行する。
+- DynamoDB Local のエンドポイント: `http://localhost:8000`（ホストで起動。in-memory で起動した場合はプロセス終了でデータは消える）。
 - ローカルでは **AWS 認証情報は不要**。スクリプト・Nuxt API はローカル向けにダミー認証を使用する。
 
 ### 2.2 本番（AWS）へのデプロイ
@@ -74,6 +74,6 @@ flowchart LR
 | 用途 | ドキュメント |
 |------|----------------|
 | テーブル・GSI・属性の詳細 | [detailed-design-dynamodb.md](./detailed-design-dynamodb.md) |
-| Docker 開発環境（Windows/Mac 共通） | [docker-development.md](./docker-development.md) |
+| ローカル開発の進め方 | [local-development.md](./local-development.md) |
 | Nuxt 4 開発環境の構築 | [setup-execution.md](./setup-execution.md) |
 | フロント静的配信（CloudFront + S3） | [cloudfront-s3-deployment.md](./cloudfront-s3-deployment.md) |

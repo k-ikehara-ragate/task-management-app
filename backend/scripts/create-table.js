@@ -84,7 +84,7 @@ async function main() {
 main().catch((err) => {
   console.error('Create table failed:', err.message)
   if (err.code === 'ECONNREFUSED' || err.name === 'NetworkingError') {
-    console.error('DynamoDB Local が起動していない可能性があります。npm run docker:up を実行してください。')
+    console.error('DynamoDB Local が起動していない可能性があります。ポート 8000 で起動しているか確認してください。手順は docs/develop-with-dynamodb.md を参照。')
   }
   process.exit(1)
 })

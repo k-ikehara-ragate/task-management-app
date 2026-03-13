@@ -5,16 +5,14 @@
   "description": "タスク管理アプリ（ルートから一括実行・Windows/Mac 両対応）",
   "scripts": {
     "install:all": "npm install && npm install --prefix frontend && npm install --prefix backend",
-    "docker:up": "docker compose up -d dynamodb-local",
-    "docker:down": "docker compose down",
-    "docker:logs": "docker compose logs -f dynamodb-local",
-    "docker:dev": "docker compose up",
+    "dynamodb:start": "node scripts/start-dynamodb-local.js",
     "db:create-table": "npm run dynamodb:create-table --prefix backend",
     "db:seed": "npm run dynamodb:seed-assignees --prefix backend",
-    "db:setup": "npm run docker:up && npm run db:create-table && npm run db:seed",
+    "db:setup": "npm run db:create-table && npm run db:seed",
     "dev": "cross-env NUXT_DYNAMODB_ENDPOINT=http://localhost:8000 npm run dev --prefix frontend",
     "build": "npm run build --prefix frontend",
-    "preview": "npm run preview --prefix frontend"
+    "preview": "npm run preview --prefix frontend",
+    "test": "npm run test --prefix frontend"
   },
   "engines": {
     "node": ">=20"

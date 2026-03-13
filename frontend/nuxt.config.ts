@@ -2,9 +2,10 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  modules: ['@nuxt/test-utils/module'],
   css: ['~/assets/css/tokens.css', '~/assets/css/animations.css'],
   devServer: {
-    host: '0.0.0.0', // Docker 等コンテナ外からアクセスするため（Windows/Mac 共通）
+    host: '0.0.0.0', // 同一ネットワーク上の他端末からアクセスするため（Windows/Mac 共通）
     port: 3000,
   },
   vite: {
