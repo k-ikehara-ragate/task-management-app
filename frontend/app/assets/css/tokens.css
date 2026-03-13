@@ -42,6 +42,12 @@
   --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
   --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.06), 0 4px 6px -4px rgba(15, 23, 42, 0.06);
   --accent-bg-subtle: rgba(79, 70, 229, 0.08);
+  --quick-action-focus-ring: #4f46e5;
+  --quick-action-focus-bg: rgba(79, 70, 229, 0.12);
+  --quick-action-focus-border: #4f46e5;
+  --quick-action-focus-text: #312e81;
+  --quick-action-focus-icon-bg: rgba(79, 70, 229, 0.25);
+  --quick-action-focus-icon-color: #4f46e5;
 }
 
 /* ダークテーマ（メイン） */
@@ -71,9 +77,31 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.25);
   --accent-bg-subtle: rgba(99, 102, 241, 0.15);
+  --quick-action-focus-ring: #818cf8;
+  --quick-action-focus-bg: rgba(99, 102, 241, 0.22);
+  --quick-action-focus-border: #818cf8;
+  --quick-action-focus-text: #e0e7ff;
+  --quick-action-focus-icon-bg: rgba(99, 102, 241, 0.4);
+  --quick-action-focus-icon-color: #a5b4fc;
 }
 
 /* ダーク時はルート背景も統一（SSR/Hydration 時のちらつき防止） */
 .theme-dark.app-root {
   color: var(--text-primary);
+}
+
+/* date 入力のカレンダーアイコン: ライト＝黒、ダーク＝白 */
+input[type="date"] {
+  color-scheme: light;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+  opacity: 0.8;
+}
+.theme-dark input[type="date"] {
+  color-scheme: dark;
+}
+.theme-dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.9;
 }

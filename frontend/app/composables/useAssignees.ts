@@ -1,7 +1,6 @@
 /**
  * 担当者マスタ（F-08）
- * 要件: プルダウン用の担当者一覧（情シス 3〜4名）
- * RAG: composables に切り出し
+ * GET /api/assignees で DynamoDB の担当者一覧を取得する
  */
 
 export interface Assignee {
@@ -9,13 +8,15 @@ export interface Assignee {
   name: string
 }
 
-const ASSIGNEES: Assignee[] = [
-  { id: '1', name: '担当者A' },
-  { id: '2', name: '担当者B' },
-  { id: '3', name: '担当者C' },
-  { id: '4', name: '担当者D' }
-]
-
-export function useAssignees (): { assignees: Assignee[] } {
-  return { assignees: ASSIGNEES }
+export function useAssignees () {
+  const { data, pending, error } = useFetch<Assignee[]>('/api/assignees', {
+    default: () => [],
+    key: 'assignees'
+  })
+  const assignees = computed(() => data.value ?? [])
+  return {
+    assignees,
+    loading: pending,
+    error
+  }
 }

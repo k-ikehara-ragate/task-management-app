@@ -24,7 +24,6 @@
     </nav>
     <div class="sidebar__footer animate-fade-in delay-4">
       <AppThemeToggle class="sidebar__theme-toggle" />
-      <span class="sidebar__version">Phase 1</span>
     </div>
   </aside>
 </template>
@@ -126,11 +125,6 @@ const isOpen = defineModel<boolean>('open', { default: false })
 
 .sidebar__theme-toggle {
   align-self: flex-start;
-}
-
-.sidebar__version {
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
 }
 
 @media (max-width: 768px) {

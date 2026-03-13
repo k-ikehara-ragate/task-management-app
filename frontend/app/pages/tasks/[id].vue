@@ -1,10 +1,19 @@
 <template>
-  <div class="task-new-page">
+  <div class="task-edit-page">
     <AppDashboardHeader
-      title="新規タスク登録"
-      subtitle="タイトル・担当者・期日を入力して登録します（初期ステータス: 未対応）"
+      title="タスク編集"
+      subtitle="タイトル・担当者・期日・ステータスを変更して保存します"
     />
-    <form class="task-form" @submit.prevent="onSubmit">
+    <p v-if="notFound" class="task-edit-page__error">
+      タスクが見つかりません。
+    </p>
+    <p v-else-if="loadError" class="task-edit-page__error">
+      {{ loadError }}
+    </p>
+    <p v-else-if="loading" class="task-edit-page__loading">
+      読み込み中...
+    </p>
+    <form v-else class="task-form" @submit.prevent="onSubmit">
       <div class="task-form__field">
         <label class="task-form__label" for="task-title">タイトル</label>
         <input
@@ -47,9 +56,22 @@
           required
         />
       </div>
-      <p class="task-form__note">
-        初期ステータスは「未対応」で登録されます。
-      </p>
+      <div class="task-form__field">
+        <label class="task-form__label" for="task-status">ステータス</label>
+        <select
+          id="task-status"
+          v-model="form.status"
+          class="task-form__select"
+        >
+          <option
+            v-for="(label, value) in TASK_STATUS_LABELS"
+            :key="value"
+            :value="value"
+          >
+            {{ label }}
+          </option>
+        </select>
+      </div>
       <p v-if="errorMessage" class="task-form__error">
         {{ errorMessage }}
       </p>
@@ -59,7 +81,7 @@
           class="task-form__btn task-form__btn--primary"
           :disabled="pending"
         >
-          {{ pending ? '登録中...' : '登録' }}
+          {{ pending ? '保存中...' : '保存' }}
         </button>
         <NuxtLink to="/tasks" class="task-form__btn task-form__btn--secondary">
           キャンセル
@@ -70,47 +92,95 @@
 </template>
 
 <script setup lang="ts">
-import type { TaskFormInput } from '~/types/task'
+import type { Task, TaskFormInput, TaskStatus } from '~/types/task'
+import { TASK_STATUS_LABELS } from '~/types/task'
 
-// 要件: タイトル・担当者・期日・初期ステータス（未対応）、登録・キャンセル（F-01）
-// 登録は POST /api/tasks で DynamoDB に保存し、成功後に一覧へ遷移
+// タスク編集（F-02, F-06）。GET /api/tasks/:id で取得、PUT /api/tasks/:id で更新
 
-const { assignees } = useAssignees()
+const route = useRoute()
 const router = useRouter()
+const { assignees } = useAssignees()
+
+const taskId = computed(() => route.params.id as string)
+const loading = ref(true)
+const notFound = ref(false)
+const loadError = ref('')
 const pending = ref(false)
 const errorMessage = ref('')
 
-const form = reactive<TaskFormInput>({
+const form = reactive<TaskFormInput & { status: TaskStatus }>({
   title: '',
   assigneeId: '',
-  dueDate: ''
+  dueDate: '',
+  status: 'not_started'
 })
+
+async function loadTask () {
+  if (!taskId.value) {
+    notFound.value = true
+    loading.value = false
+    return
+  }
+  loading.value = true
+  loadError.value = ''
+  notFound.value = false
+  try {
+    const task = await $fetch<Task>(`/api/tasks/${taskId.value}`)
+    form.title = task.title
+    form.assigneeId = task.assigneeId
+    form.dueDate = task.dueDate
+    form.status = task.status
+  } catch (e: unknown) {
+    const err = e as { statusCode?: number }
+    if (err?.statusCode === 404) {
+      notFound.value = true
+    } else {
+      loadError.value = e instanceof Error ? e.message : '取得に失敗しました'
+    }
+  } finally {
+    loading.value = false
+  }
+}
 
 async function onSubmit () {
   pending.value = true
   errorMessage.value = ''
   try {
-    await $fetch('/api/tasks', {
-      method: 'POST',
+    await $fetch(`/api/tasks/${taskId.value}`, {
+      method: 'PUT',
       body: {
         title: form.title.trim(),
         assigneeId: form.assigneeId,
-        dueDate: form.dueDate
+        dueDate: form.dueDate,
+        status: form.status
       }
     })
     await router.push('/tasks')
   } catch (e) {
-    errorMessage.value = e instanceof Error ? e.message : '登録に失敗しました'
+    errorMessage.value = e instanceof Error ? e.message : '保存に失敗しました'
   } finally {
     pending.value = false
   }
 }
+
+onMounted(loadTask)
 </script>
 
 <style scoped>
-.task-new-page {
+.task-edit-page {
   padding: var(--space-6);
   min-width: 0;
+}
+
+.task-edit-page__error,
+.task-edit-page__loading {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0 0 var(--space-5);
+}
+
+.task-edit-page__error {
+  color: var(--status-error, #b91c1c);
 }
 
 .task-form {
@@ -151,10 +221,6 @@ async function onSubmit () {
   transition: border-color 0.15s ease;
 }
 
-.task-form__input::placeholder {
-  color: var(--text-muted);
-}
-
 .task-form__input:focus,
 .task-form__select:focus {
   outline: none;
@@ -164,12 +230,6 @@ async function onSubmit () {
 .task-form__select {
   cursor: pointer;
   appearance: auto;
-}
-
-.task-form__note {
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-  margin: 0 0 var(--space-5);
 }
 
 .task-form__error {

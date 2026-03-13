@@ -151,12 +151,24 @@ const statCards = [
   color: var(--text-primary);
   font-weight: 500;
   font-size: 0.875rem;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
 }
 
-.quick-action-card:hover {
-  border-color: var(--border);
-  box-shadow: var(--shadow-md);
+.quick-action-card:hover,
+.quick-action-card:focus,
+.quick-action-card:focus-visible {
+  outline: none;
+  background: var(--quick-action-focus-bg);
+  border-color: var(--quick-action-focus-border);
+  box-shadow: 0 0 0 2px var(--quick-action-focus-ring);
+  color: var(--quick-action-focus-text);
+}
+
+.quick-action-card:hover .quick-action-card__icon,
+.quick-action-card:focus .quick-action-card__icon,
+.quick-action-card:focus-visible .quick-action-card__icon {
+  background: var(--quick-action-focus-icon-bg);
+  color: var(--quick-action-focus-icon-color);
 }
 
 .quick-action-card__icon {
@@ -170,6 +182,7 @@ const statCards = [
   justify-content: center;
   font-size: 1rem;
   font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 /* Vue Transition（アニメーション） */
