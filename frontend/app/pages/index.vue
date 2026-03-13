@@ -1,9 +1,34 @@
 <template>
   <div class="top-page">
-    <AppDashboardHeader
-      title="ダッシュボード"
-      subtitle="タスクの進捗をひと目で確認できます（情シス向け）"
-    />
+    <div class="top-page__header-row">
+      <AppDashboardHeader
+        title="ダッシュボード"
+        subtitle="タスクの進捗をひと目で確認できます（情シス向け）"
+      />
+      <div class="top-page__assignee-toggle" aria-label="担当者でフィルタ">
+        <span class="top-page__assignee-label">担当者</span>
+        <div class="assignee-toggle" role="group">
+          <button
+            type="button"
+            class="assignee-toggle__btn"
+            :class="{ 'assignee-toggle__btn--active': selectedAssigneeId === '' }"
+            @click="selectedAssigneeId = ''"
+          >
+            すべて
+          </button>
+          <button
+            v-for="a in assignees"
+            :key="a.id"
+            type="button"
+            class="assignee-toggle__btn"
+            :class="{ 'assignee-toggle__btn--active': selectedAssigneeId === a.id }"
+            @click="selectedAssigneeId = a.id"
+          >
+            {{ a.name }}
+          </button>
+        </div>
+      </div>
+    </div>
     <div class="top-page__grid">
       <AppStatCard
         v-for="(card, i) in statCards"
@@ -53,19 +78,110 @@
 </template>
 
 <script setup lang="ts">
-// トップページ（RAG requirements: タスク一覧・登録・編集の入口）
-// 参考: https://dribbble.com/shots/25683483-Dashboard-UI
+import type { Task, TaskStatus } from '~/types/task'
 
-const statCards = [
-  { label: '未対応', value: '—', iconBg: 'var(--status-pending)' },
-  { label: '対応中', value: '—', iconBg: 'var(--status-progress)' },
-  { label: '完了', value: '—', iconBg: 'var(--status-done)' }
-]
+// トップページ（RAG requirements: タスク一覧・登録・編集の入口）
+// 担当者トグルで選択中の担当者タスクのみ統計に反映
+
+const { assignees } = useAssignees()
+const selectedAssigneeId = ref('')
+const tasks = ref<Task[]>([])
+const loading = ref(true)
+
+async function fetchTasks () {
+  loading.value = true
+  try {
+    const q = selectedAssigneeId.value ? `?assigneeId=${encodeURIComponent(selectedAssigneeId.value)}` : ''
+    tasks.value = await $fetch<Task[]>(`/api/tasks${q}`)
+  } catch {
+    tasks.value = []
+  } finally {
+    loading.value = false
+  }
+}
+
+function countByStatus (status: TaskStatus): number {
+  return tasks.value.filter((t) => t.status === status).length
+}
+
+const statCards = computed(() => [
+  { label: '未対応', value: loading.value ? '…' : countByStatus('not_started'), iconBg: 'var(--status-pending)' },
+  { label: '対応中', value: loading.value ? '…' : countByStatus('in_progress'), iconBg: 'var(--status-progress)' },
+  { label: '完了', value: loading.value ? '…' : countByStatus('done'), iconBg: 'var(--status-done)' }
+])
+
+watch(selectedAssigneeId, fetchTasks)
+onMounted(fetchTasks)
 </script>
 
 <style scoped>
 .top-page {
   padding: var(--space-6);
+}
+
+.top-page__header-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.top-page__header-row :deep(.header) {
+  flex: 1;
+  min-width: 0;
+}
+
+.top-page__assignee-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.top-page__assignee-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.assignee-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.assignee-toggle__btn {
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.assignee-toggle__btn:hover {
+  color: var(--text-primary);
+  background: var(--assignee-toggle-hover-bg, rgba(0, 0, 0, 0.06));
+}
+
+.assignee-toggle__btn--active {
+  color: var(--assignee-toggle-active-text, #fff);
+  background: var(--accent);
+}
+
+.assignee-toggle__btn--active:hover {
+  background: var(--accent-hover);
+  color: var(--assignee-toggle-active-text, #fff);
 }
 
 .top-page__grid {
