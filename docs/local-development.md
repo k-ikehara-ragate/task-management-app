@@ -91,6 +91,50 @@ npm run dev
 
 ---
 
+## DB に接続できているかの確認
+
+### 確認方法 1: ブラウザで確認（推奨）
+
+1. **http://localhost:3000** を開く。
+2. **タスク一覧**（`/tasks`）または **ダッシュボード** を開く。
+3. 次のどちらかで判断する。
+   - **接続できている**: タスク一覧や担当者ドロップダウンが表示され、500 エラーや「DynamoDB に接続できません」などのメッセージが出ない。
+   - **接続できていない**: 500 Server Error、または「DynamoDB Local に接続できません」「テーブルが存在しません」などのメッセージが表示される。
+
+### 確認方法 2: AWS CLI で DynamoDB Local を確認（任意）
+
+DynamoDB Local が起動しているか・テーブルがあるかをコマンドで確認する。
+
+```bash
+aws dynamodb list-tables --endpoint-url http://localhost:8000
+```
+
+- **接続できている**: `"TableNames": ["task-management"]` のようにテーブル名が返る。
+- **DynamoDB Local が止まっている**: `Could not connect to the endpoint URL` などのエラーになる。
+
+### 接続に必要な条件（チェックリスト）
+
+| 条件 | 確認方法 |
+|------|----------|
+| DynamoDB Local がポート 8000 で起動している | ターミナルで `npm run dynamodb:start` を実行したウィンドウが開いたままであること。または上記 `aws dynamodb list-tables --endpoint-url http://localhost:8000` が成功すること。 |
+| テーブルが作成済みである | 初回または Local を起動し直したあとは `npm run db:setup` を実行していること。 |
+| フロントを**リポジトリルート**から起動している | `npm run dev` を**プロジェクトルート**で実行していること（`npm run dev --prefix frontend` のみだと `NUXT_DYNAMODB_ENDPOINT` が渡らず DB に接続されない）。 |
+
+---
+
+## 接続するための手順（まとめ）
+
+DB に接続するには、次を**この順で**行う。
+
+1. **ターミナル 1**: リポジトリルートで `npm run dynamodb:start` を実行し、DynamoDB Local を起動したままにする。
+2. **ターミナル 2**: リポジトリルートで **初回または Local を起動し直したあと** は `npm run db:setup` を実行する。
+3. **ターミナル 2**: 同じターミナルで `npm run dev` を実行する（必ずルートで。`cd frontend` してからではない）。
+4. ブラウザで **http://localhost:3000** を開き、タスク一覧などが表示されることを確認する。
+
+フロントだけ先に起動している場合は、上記 1 → 2 を済ませたうえで、**ルートで** `npm run dev` をやり直すと DB に接続される。
+
+---
+
 ## 1. 前提条件
 
 | 項目 | 要件 |
@@ -170,7 +214,7 @@ flowchart TD
 
 | 現象 | 対処 |
 |------|------|
-| タスク一覧で 500 / 「DynamoDB に接続できません」 | DynamoDB Local をポート 8000 で起動しているか確認する。 |
+| タスク一覧で 500 / 「DynamoDB に接続できません」 | 上記「DB に接続できているかの確認」「接続するための手順」を参照。DynamoDB Local をポート 8000 で起動し、`npm run db:setup` 済みか、かつ**リポジトリルート**から `npm run dev` しているか確認する。 |
 | テーブルが存在しない | `npm run db:create-table` を実行する。続けて `npm run db:seed` で担当者を投入する。 |
 | フロントで本番 AWS に接続してしまう | 必ずリポジトリルートから `npm run dev` で起動する（`npm run dev --prefix frontend` のみだと `NUXT_DYNAMODB_ENDPOINT` が渡らない）。 |
 

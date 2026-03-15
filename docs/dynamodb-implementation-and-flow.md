@@ -64,7 +64,7 @@ flowchart LR
    npm install
    npx cdk bootstrap
    ```
-   - AWS CLI の設定（`aws configure` または環境変数）が済んでいること
+   - AWS CLI の設定（`aws configure` または環境変数）が済んでいること。**手順は [cloudfront-s3-deployment.md](./cloudfront-s3-deployment.md) の「AWS CLI の設定方法」を参照。**
 
 2. **DynamoDB スタックのデプロイ**
    ```bash

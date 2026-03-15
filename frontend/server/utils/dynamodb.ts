@@ -13,13 +13,28 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
 
 const TABLE_NAME = 'task-management'
 
-export function getDynamoClient(event: Parameters<typeof useRuntimeConfig>[0]) {
+/** ランタイム設定から DynamoDB エンドポイント文字列を取得する（未設定時は空文字） */
+export function getDynamoEndpoint(event: Parameters<typeof useRuntimeConfig>[0]): string {
   const config = useRuntimeConfig(event)
-  const endpoint =
+  return (
     (config.dynamodbEndpoint as string) ||
     process.env.NUXT_DYNAMODB_ENDPOINT ||
     process.env.DYNAMODB_ENDPOINT ||
     ''
+  )
+}
+
+/**
+ * DynamoDB が利用可能か（エンドポイントまたは本番用の接続先が設定されているか）。
+ * 未設定の場合はビルド時プリレンダーや静的配信時であり、API は空データを返すべき。
+ */
+export function isDynamoConfigured(event: Parameters<typeof useRuntimeConfig>[0]): boolean {
+  const endpoint = getDynamoEndpoint(event)
+  return typeof endpoint === 'string' && endpoint.length > 0
+}
+
+export function getDynamoClient(event: Parameters<typeof useRuntimeConfig>[0]) {
+  const endpoint = getDynamoEndpoint(event)
   const region = process.env.AWS_REGION || 'ap-northeast-1'
   const isLocalEndpoint =
     typeof endpoint === 'string' &&
@@ -61,7 +76,11 @@ export function handleDynamoError(err: unknown): never {
   let statusCode = 500
   let statusMessage = 'DynamoDB の操作に失敗しました'
 
-  if (name === 'ResourceNotFoundException' || message.includes('ResourceNotFoundException')) {
+  const isResourceNotFound =
+    name === 'ResourceNotFoundException' ||
+    code === 'ResourceNotFoundException' ||
+    message.includes('ResourceNotFoundException')
+  if (isResourceNotFound) {
     statusCode = 503
     statusMessage = isLocal
       ? 'テーブルが存在しません。DynamoDB Local 起動後に npm run db:create-table を実行してください。'

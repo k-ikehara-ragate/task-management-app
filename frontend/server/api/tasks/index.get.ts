@@ -3,10 +3,13 @@
  */
 
 import { QueryCommand } from '@aws-sdk/client-dynamodb'
-import { getDynamoClient, getTableName, unmarshall, handleDynamoError } from '../../utils/dynamodb'
+import { getDynamoClient, getTableName, isDynamoConfigured, unmarshall, handleDynamoError } from '../../utils/dynamodb'
 import { itemToTask } from '../../utils/task-mapping'
 
 export default defineEventHandler(async (event) => {
+  if (!isDynamoConfigured(event)) {
+    return []
+  }
   try {
     const query = getQuery(event)
     const assigneeId = query.assigneeId as string | undefined
