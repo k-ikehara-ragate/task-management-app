@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build / output
+dist/
+.output/
+.nuxt/
+.nitro/
+.data/
+.cache/
+cdk.out/
+
+# --- シークレット・認証情報（GitHub に絶対に上げない） ---
+.env
+.env.*
+!.env.example
+# AWS 認証情報がプロジェクト内に置かれた場合
+.aws/
+credentials
+*.pem
+*.key
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
+.fleet
+
+# Logs
+*.log
+logs/

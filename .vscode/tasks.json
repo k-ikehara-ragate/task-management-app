@@ -1,0 +1,42 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dev: Nuxt 起動（ルートから）",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {}
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "nuxt",
+        "pattern": { "regexp": "^$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Nuxt",
+          "endsPattern": "Local:.*localhost"
+        }
+      },
+      "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "db: テーブル作成・シード",
+      "type": "shell",
+      "command": "npm run db:setup",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "Cursorでアプリを表示 (Simple Browser)",
+      "type": "shell",
+      "command": "open 'vscode://vscode.simple-browser/show?url=http://localhost:3000'",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent" },
+      "dependsOn": []
+    }
+  ]
+}

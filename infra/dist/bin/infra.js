@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("source-map-support/register");
+const cdk = require("aws-cdk-lib");
+const frontend_stack_1 = require("../lib/frontend-stack");
+const dynamodb_stack_1 = require("../lib/dynamodb-stack");
+const app = new cdk.App();
+const env = {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION ?? 'ap-northeast-1',
+};
+new frontend_stack_1.FrontendStack(app, 'FrontendStack', {
+    env,
+    description: 'CloudFront + S3 static site for task management frontend',
+});
+new dynamodb_stack_1.DynamoDBStack(app, 'DynamoDBStack', {
+    env,
+    description: 'DynamoDB table for task and assignee (Phase 1)',
+});
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5mcmEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9iaW4vaW5mcmEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQ0EsdUNBQW9DO0FBQ3BDLG1DQUFrQztBQUNsQywwREFBcUQ7QUFDckQsMERBQXFEO0FBRXJELE1BQU0sR0FBRyxHQUFHLElBQUksR0FBRyxDQUFDLEdBQUcsRUFBRSxDQUFBO0FBRXpCLE1BQU0sR0FBRyxHQUFHO0lBQ1YsT0FBTyxFQUFFLE9BQU8sQ0FBQyxHQUFHLENBQUMsbUJBQW1CO0lBQ3hDLE1BQU0sRUFBRSxPQUFPLENBQUMsR0FBRyxDQUFDLGtCQUFrQixJQUFJLGdCQUFnQjtDQUMzRCxDQUFBO0FBRUQsSUFBSSw4QkFBYSxDQUFDLEdBQUcsRUFBRSxlQUFlLEVBQUU7SUFDdEMsR0FBRztJQUNILFdBQVcsRUFBRSwwREFBMEQ7Q0FDeEUsQ0FBQyxDQUFBO0FBRUYsSUFBSSw4QkFBYSxDQUFDLEdBQUcsRUFBRSxlQUFlLEVBQUU7SUFDdEMsR0FBRztJQUNILFdBQVcsRUFBRSxnREFBZ0Q7Q0FDOUQsQ0FBQyxDQUFBIiwic291cmNlc0NvbnRlbnQiOlsiIyEvdXNyL2Jpbi9lbnYgbm9kZVxuaW1wb3J0ICdzb3VyY2UtbWFwLXN1cHBvcnQvcmVnaXN0ZXInXG5pbXBvcnQgKiBhcyBjZGsgZnJvbSAnYXdzLWNkay1saWInXG5pbXBvcnQgeyBGcm9udGVuZFN0YWNrIH0gZnJvbSAnLi4vbGliL2Zyb250ZW5kLXN0YWNrJ1xuaW1wb3J0IHsgRHluYW1vREJTdGFjayB9IGZyb20gJy4uL2xpYi9keW5hbW9kYi1zdGFjaydcblxuY29uc3QgYXBwID0gbmV3IGNkay5BcHAoKVxuXG5jb25zdCBlbnYgPSB7XG4gIGFjY291bnQ6IHByb2Nlc3MuZW52LkNES19ERUZBVUxUX0FDQ09VTlQsXG4gIHJlZ2lvbjogcHJvY2Vzcy5lbnYuQ0RLX0RFRkFVTFRfUkVHSU9OID8/ICdhcC1ub3J0aGVhc3QtMScsXG59XG5cbm5ldyBGcm9udGVuZFN0YWNrKGFwcCwgJ0Zyb250ZW5kU3RhY2snLCB7XG4gIGVudixcbiAgZGVzY3JpcHRpb246ICdDbG91ZEZyb250ICsgUzMgc3RhdGljIHNpdGUgZm9yIHRhc2sgbWFuYWdlbWVudCBmcm9udGVuZCcsXG59KVxuXG5uZXcgRHluYW1vREJTdGFjayhhcHAsICdEeW5hbW9EQlN0YWNrJywge1xuICBlbnYsXG4gIGRlc2NyaXB0aW9uOiAnRHluYW1vREIgdGFibGUgZm9yIHRhc2sgYW5kIGFzc2lnbmVlIChQaGFzZSAxKScsXG59KVxuIl19

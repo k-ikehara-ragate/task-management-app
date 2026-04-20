@@ -1,0 +1,19 @@
+{
+  "name": "infra",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "cdk": "cdk"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.170.0",
+    "constructs": "^10.5.1"
+  },
+  "devDependencies": {
+    "aws-cdk": "^2.243.0",
+    "@types/node": "^20.10.0",
+    "source-map-support": "^0.5.21",
+    "typescript": "~5.3.3"
+  }
+}

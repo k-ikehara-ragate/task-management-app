@@ -1,0 +1,91 @@
+/**
+ * ダッシュボード用デザイントークン（プロフェッショナル向け）
+ * 参考: Dribbble Dashboard UI / RAG reference
+ * ダークテーマ: .theme-dark をルートに付与して適用
+ */
+:root {
+  /* 余白・角丸（テーマ非依存） */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* ライト（デフォルト・見やすいコントラスト） */
+  --dashboard-bg: #f1f5f9;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+  --sidebar-bg: #0f172a;
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --sidebar-text: #94a3b8;
+  --sidebar-text-active: #f1f5f9;
+  --sidebar-accent: rgba(79, 70, 229, 0.15);
+  --sidebar-accent-text: #818cf8;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --status-pending: #64748b;
+  --status-progress: #c2410c;
+  --status-done: #047857;
+  --border: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.08);
+  --accent-bg-subtle: rgba(79, 70, 229, 0.1);
+  --quick-action-focus-ring: #4f46e5;
+  --quick-action-focus-bg: rgba(79, 70, 229, 0.12);
+  --quick-action-focus-border: #4f46e5;
+  --quick-action-focus-text: #312e81;
+  --quick-action-focus-icon-bg: rgba(79, 70, 229, 0.25);
+  --quick-action-focus-icon-color: #4f46e5;
+  --assignee-toggle-hover-bg: rgba(15, 23, 42, 0.06);
+  --assignee-toggle-active-text: #ffffff;
+}
+
+/* ダークテーマ（メイン） */
+.theme-dark {
+  --dashboard-bg: #0f172a;
+  --surface: #1e293b;
+  --surface-elevated: #334155;
+  --sidebar-bg: #020617;
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --sidebar-text: #94a3b8;
+  --sidebar-text-active: #f1f5f9;
+  --sidebar-accent: rgba(99, 102, 241, 0.2);
+  --sidebar-accent-text: #a5b4fc;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
+  --status-pending: #cbd5e1;
+  --status-progress: #f59e0b;
+  --status-done: #6ee7b7;
+  --border: #334155;
+  --border-subtle: #1e293b;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.25);
+  --accent-bg-subtle: rgba(99, 102, 241, 0.15);
+  --quick-action-focus-ring: #818cf8;
+  --quick-action-focus-bg: rgba(99, 102, 241, 0.22);
+  --quick-action-focus-border: #818cf8;
+  --quick-action-focus-text: #e0e7ff;
+  --quick-action-focus-icon-bg: rgba(99, 102, 241, 0.4);
+  --quick-action-focus-icon-color: #a5b4fc;
+  --assignee-toggle-hover-bg: rgba(255, 255, 255, 0.08);
+  --assignee-toggle-active-text: #e0e7ff;
+}
+
+/* ダーク時はルート背景も統一（SSR/Hydration 時のちらつき防止） */
+.theme-dark.app-root {
+  color: var(--text-primary);
+}

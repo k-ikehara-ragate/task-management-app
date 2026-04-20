@@ -1,0 +1,2 @@
+# シェルスクリプトは Docker（Linux）内で実行するため LF に統一（Windows/Mac 共通）
+*.sh text eol=lf
